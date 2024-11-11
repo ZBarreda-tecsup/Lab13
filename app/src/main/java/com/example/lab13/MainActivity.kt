@@ -5,9 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +48,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ButtonVisibility() {
     var isVisible by remember { mutableStateOf(false)}
+    val isBlue = remember { mutableStateOf(true) }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isBlue.value) Color.Blue else Color.Green,
+        animationSpec = spring(dampingRatio = 10f)  // Duración de 1 segundo
+    )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,20 +67,22 @@ fun ButtonVisibility() {
 
         AnimatedVisibility(
             visible = isVisible,
-            enter = fadeIn(),
-            exit = fadeOut()
+            enter = fadeIn(animationSpec = tween(500)),
+            exit = fadeOut(tween(500))
         ) {
             Box(
                 modifier = Modifier
                     .size(100.dp)
-                    .background(Color.Blue)
+                    .background(backgroundColor)
+                    .clickable { isBlue.value = !isBlue.value }
             )
         }
+
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-
+    ButtonVisibility()
 }
