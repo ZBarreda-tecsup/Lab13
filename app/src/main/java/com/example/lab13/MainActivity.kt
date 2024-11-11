@@ -4,31 +4,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,68 +42,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AnimatedContentExample()
+            AnimatedBoxWithButton()
         }
     }
 }
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun AnimatedContentExample() {
-    var currentState by remember { mutableStateOf(ContentState.Loading) }
-
-    // Botón para cambiar de estado
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AnimatedContent(
-            targetState = currentState,
-            transitionSpec = {
-                // Definimos la animación de transición entre estados.
-                fadeIn(animationSpec = tween(durationMillis = 500)) with fadeOut(animationSpec = tween(durationMillis = 500))
-            }
-        ) { state ->
-            when (state) {
-                ContentState.Loading -> {
-                    Text("Cargando...", style = MaterialTheme.typography.bodyMedium)
-                }
-                ContentState.Content -> {
-                    Text("¡Contenido cargado con éxito!", style = MaterialTheme.typography.bodyMedium)
-                }
-                ContentState.Error -> {
-                    Text("Hubo un error al cargar el contenido.", style = MaterialTheme.typography.bodyMedium, color = Color.Red)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Botón para alternar entre los estados
-        Row {
-            Button(onClick = { currentState = ContentState.Loading }) {
-                Text("Cargando")
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            Button(onClick = { currentState = ContentState.Content }) {
-                Text("Contenido")
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            Button(onClick = { currentState = ContentState.Error }) {
-                Text("Error")
-            }
-        }
-    }
-}
-
-enum class ContentState {
-    Loading,
-    Content,
-    Error
-}
-
-/**
 @Composable
 fun AnimatedBoxWithButton() {
     val isExpanded = remember { mutableStateOf(false) }
@@ -143,7 +79,7 @@ fun AnimatedBoxWithButton() {
         }
     }
 }
-**/
+
 /**
 @Composable
 fun ButtonVisibility() {
